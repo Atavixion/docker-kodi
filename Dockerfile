@@ -17,3 +17,19 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 FROM alpine:3.15
+
+ARG KODI_VERSION=19.1
+
+# Set timezone
+ENV TZ=Africa/Johannesburg
+
+RUN apk update && apk upgrade && \
+    apk add musl-locales \
+    apk add tzdata \
+    apk add kodi~$KODI_VERSION
+
+RUN cp /usr/share/zoneinfo/America/Santiago /etc/localtime && \
+    rm -rf /var/cache/apk/*
+
+COPY entrypoint.sh /usr/local/bin
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
