@@ -24,8 +24,7 @@ ARG KODI_VERSION=19.1
 ENV TZ=Africa/Johannesburg
 
 RUN apk update && apk upgrade && \
-    apk add musl-locales \
-    apk add tzdata \
+    apk add musl-locales tzdata && \
     apk add kodi~$KODI_VERSION
 
 RUN cp /usr/share/zoneinfo/America/Santiago /etc/localtime && \
