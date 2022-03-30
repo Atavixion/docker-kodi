@@ -20,15 +20,20 @@ FROM alpine:3.15
 
 ARG KODI_VERSION=19.1
 
+# Extra packages
+ARG KODI_EXTRA_PACKAGES="samba-client"
+
 # Set timezone
 ENV TZ=Africa/Johannesburg
 
+# add locales, bash and kodi
 RUN apk update && apk upgrade && \
-    apk add musl-locales tzdata && \
-    apk add kodi~$KODI_VERSION
+    apk add tzdata bash mesa-dri-swrast && \
+    apk add kodi~$KODI_VERSION $KODI_EXTRA_PACKAGES
 
-RUN cp /usr/share/zoneinfo/America/Santiago /etc/localtime && \
+RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && \
     rm -rf /var/cache/apk/*
 
+# setup entry point
 COPY entrypoint.sh /usr/local/bin
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
